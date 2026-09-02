@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var happiness = 50
+    @State private var happiness = 30
     @State private var duckIsGrowing = false
+    @State private var taskCompleted = false
     var body: some View {
         VStack(spacing: 30) {
             Text("My Little World")
-            if happiness < 51 {
+            if happiness < 40 {
                 Text("🥺")
             } else if happiness <= 70 {
                 Text("🐥")
@@ -23,6 +24,13 @@ struct ContentView: View {
                 Text("😄")
             }
             Text("Happiness: \(happiness)")
+            Text(taskCompleted ? "✓ Read 20 pages" : "□ Read 20 pages")
+            if (!taskCompleted){
+                Button("Complete") {
+                taskCompleted = true
+                happiness += 10
+            }
+            }
             Button("feed me"){
                 duckIsGrowing = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {duckIsGrowing = false}
