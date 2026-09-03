@@ -7,10 +7,21 @@
 
 import SwiftUI
 
+struct Goal {
+    var name: String
+    var completed: Bool
+    var message: String
+    var reward: Int
+}
+
 struct ContentView: View {
     @State private var happiness = 30
     @State private var duckIsGrowing = false
-    @State private var taskCompleted = false
+    @State private var duckMessage = ""
+    @State private var goals = [
+        Goal(name: "Read 20 pages", completed: false, message: "Growing genuis", reward: 10),
+        Goal(name: "Go to the gym", completed: false, message: "holy buff", reward: 15)
+    ]
     var body: some View {
         VStack(spacing: 30) {
             Text("My Little World")
@@ -23,19 +34,34 @@ struct ContentView: View {
             } else {
                 Text("😄")
             }
+            Text(duckMessage)
             Text("Happiness: \(happiness)")
-            Text(taskCompleted ? "✓ Read 20 pages" : "□ Read 20 pages")
-            if (!taskCompleted){
-                Button("Complete") {
-                taskCompleted = true
-                happiness += 10
+            
+            Text("TODAY")
+            ForEach(goals.indices, id: \.self) { index in
+
+                Text(goals[index].completed ? "✓ \(goals[index].name)" : "□ \(goals[index].name)")
+
+                if !goals[index].completed {
+                    Button("Complete") {
+                        goals[index].completed = true
+                        happiness += goals[index].reward
+                        duckIsGrowing = true
+                        duckMessage = goals[index].message
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {duckIsGrowing = false
+                            duckMessage = ""}
+                        
+                        
+                    }
+                }
             }
-            }
-            Button("feed me"){
-                duckIsGrowing = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {duckIsGrowing = false}
-                happiness = happiness+10
-            }
+//
+//            Button("feed me"){
+//                duckIsGrowing = true
+//                
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {duckIsGrowing = false}
+//                happiness = happiness+10
+//            }
             
         }
         .padding()
